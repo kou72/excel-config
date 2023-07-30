@@ -54,6 +54,7 @@ Sub ExtractConfigInfo()
             If InStr(textLine, word) > 0 Then
                 hierarchyLevel = Len(textLine) - Len(LTrim(textLine))
                 foundLine = True
+                MsgBox textLine
             ElseIf foundLine Then
                 ' 目的の文字列が見つかったら
                 ' 現在の行が子要素かどうかチェック
