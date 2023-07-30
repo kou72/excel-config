@@ -1,7 +1,7 @@
 Attribute VB_Name = "Module1"
 
 Sub ExtractConfigInfo()
-    ' ダイアログを表示し、選択したパスを取得
+    ' �_�C�A���O��\�����A�I�������p�X���擾
     Dim fd As FileDialog
     Set fd = Application.FileDialog(msoFileDialogFilePicker)
     Dim selectedPath As String
@@ -14,61 +14,61 @@ Sub ExtractConfigInfo()
         End If
     End With
 
-    ' 選択したパスを "path" という名前のセルに書き込む
+    ' �I�������p�X�� "path" �Ƃ������O�̃Z���ɏ�������
     ' Dim rng As Range
     ' Set rng = ThisWorkbook.Names("path").RefersToRange
     ' rng.Value = selectedPath
 
-    ' Configファイル名（実際のファイル名に置き換えてください）
+    ' Config�t�@�C�����i���ۂ̃t�@�C�����ɒu�������Ă��������j
     Dim fileName As String
     fileName = selectedPath
     
-    ' 検索対象のキーワードリスト
+    ' �����Ώۂ̃L�[���[�h���X�g
     Dim searchWords As Variant
-    searchWords = Array("interface FastEthernet0/1", "interface FastEthernet0/2", "interface FastEthernet0/3") ' 必要なら更に追加
+    searchWords = Array("interface FastEthernet0/1", "interface FastEthernet0/2", "interface FastEthernet0/3") ' �K�v�Ȃ�X�ɒǉ�
     
-    ' ファイルを読み込みモードで開く
+    ' �t�@�C����ǂݍ��݃��[�h�ŊJ��
     Dim fileNo As Integer
     fileNo = FreeFile
     Open fileName For Input As fileNo
     
-    ' フラグを初期化
+    ' �t���O��������
     Dim hierarchyLevel As Integer
     Dim foundLine As Boolean
     Dim word As Variant
     Dim textLine As String
     
-    ' 検索キーワードでループ
+    ' �����L�[���[�h�Ń��[�v
     For Each word In searchWords
         hierarchyLevel = 0
         foundLine = False
         
-        ' ファイルを最初から読み込む
+        ' �t�@�C�����ŏ�����ǂݍ���
         Seek fileNo, 1
         
-        ' ファイルを1行ずつ読み込む
+        ' �t�@�C����1�s���ǂݍ���
         Do Until EOF(fileNo)
             Line Input #fileNo, textLine
             
-            ' 行が目的の文字列を含むかチェック
+            ' �s���ړI�̕�������܂ނ��`�F�b�N
             If InStr(textLine, word) > 0 Then
                 hierarchyLevel = Len(textLine) - Len(LTrim(textLine))
                 foundLine = True
             ElseIf foundLine Then
-                ' 目的の文字列が見つかったら
-                ' 現在の行が子要素かどうかチェック
+                ' �ړI�̕����񂪌���������
+                ' ���݂̍s���q�v�f���ǂ����`�F�b�N
                 If Len(textLine) - Len(LTrim(textLine)) > hierarchyLevel Then
-                    ' これは子要素なので、出力
+                    ' ����͎q�v�f�Ȃ̂ŁA�o��
                     Debug.Print textLine
                     MsgBox textLine
                 Else
-                    ' 子要素の範囲を超えたので、ループを抜ける
+                    ' �q�v�f�͈̔͂𒴂����̂ŁA���[�v�𔲂���
                     Exit Do
                 End If
             End If
         Loop
     Next word
     
-    ' ファイルを閉じる
+    ' �t�@�C�������
     Close fileNo
 End Sub
